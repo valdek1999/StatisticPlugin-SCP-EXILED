@@ -13,9 +13,12 @@ namespace StatisticPlugin
         public readonly Plugin plugin;
 
         public bool server_restart = false;
-        public EventHandlers(Plugin plugin)
+
+        Dictionary<string, string> list_play;
+        public EventHandlers(Plugin plugin, Dictionary<string, string> list_play)
         {
             this.plugin = plugin;
+            this.list_play = list_play;
             
         }
 
@@ -85,9 +88,10 @@ namespace StatisticPlugin
 
         internal void RoundStart1()
         {
+            //plugin.InfoPlayers(list_play);
             string text = "";
             bool first = true;
-            foreach(var t in plugin.list)
+            foreach(var t in list_play)
             {
                 if(first)
                 {
@@ -105,6 +109,7 @@ namespace StatisticPlugin
 
         internal void RoundStart(RoundEndedEventArgs ev)
         {
+
             IEnumerable<Player> p = Player.List;
             foreach(var t in p)
             {
@@ -112,12 +117,14 @@ namespace StatisticPlugin
                 string key = player.UserId;
                 string data = DataString(key, player, true);
                 string Nickname = player.Nickname.Replace(' ', '_');
-                string GroupName = player.GroupName == "" || player.GroupName == "none" ? "none" : player.GroupName;
-                string info = data + " " + player.IPAddress + " " + GroupName + " " + Nickname;
-                if (plugin.list.ContainsKey(key))
+                string GroupName = player.GroupName;
+                if (GroupName == "" || GroupName == " " || GroupName == null)
+                    player.GroupName = "none";
+                string info = data + " " + player.IPAddress + " " + Nickname + " " + GroupName;
+                if (list_play.ContainsKey(key))
                 {
-                    plugin.list.Remove(key);
-                    plugin.list.Add(key, info);
+                    list_play.Remove(key);
+                    list_play.Add(key, info);
                 }
                 //plugin.InfoPlayers();
             }    
@@ -129,12 +136,14 @@ namespace StatisticPlugin
             string key = player.UserId;
             string data = DataString(key, player, true);
             string Nickname = player.Nickname.Replace(' ', '_');
-            string GroupName = player.GroupName == "" || player.GroupName == "none" ? "none" : player.GroupName;
-            string info = data + " " + player.IPAddress + " " + GroupName + " " + Nickname;
-            if (plugin.list.ContainsKey(key))
+            string GroupName = player.GroupName;
+            if (GroupName == "" || GroupName == " " || GroupName==null)
+                player.GroupName = "none";
+            string info = data + " " + player.IPAddress + " " + Nickname + " " + GroupName;
+            if (list_play.ContainsKey(key))
             {
-                plugin.list.Remove(key);
-                plugin.list.Add(key, info);
+                list_play.Remove(key);
+                list_play.Add(key, info);
             }
             //plugin.InfoPlayers();
         }
@@ -142,13 +151,13 @@ namespace StatisticPlugin
         internal String DataString(string key , Player player, bool disconnect)
         {
             string temp="";
-            if(plugin.list.TryGetValue(key,out temp))
+            if(list_play.TryGetValue(key,out temp))
             {
                 string[] info = temp.Split(' ');
                 DateTime time = DateTime.Parse(info[1]+" "+info[2]);
-                double minute_sesion = Convert.ToInt32(info[0]);
+                int minute_sesion = Convert.ToInt32(info[0]);
                 if (disconnect)
-                    minute_sesion = (new TimeSpan(DateTime.Now.Ticks - time.Ticks).TotalMinutes);
+                    minute_sesion = Convert.ToInt32((new TimeSpan(DateTime.Now.Ticks - time.Ticks)).TotalMinutes);
                 return minute_sesion + " " + time.ToString();
             }
             
@@ -160,17 +169,19 @@ namespace StatisticPlugin
             string key = player.UserId;
             string data = DataString(key, player,false);
             string Nickname = player.Nickname.Replace(' ', '_');
-            string GroupName = player.GroupName == ""|| player.GroupName == "none" ? "none" : player.GroupName;
-            string info = data + " " + player.IPAddress + " " + GroupName + " " + Nickname;
+            string GroupName = player.GroupName;
+            if (GroupName == "" || GroupName == " " || GroupName == null)
+                player.GroupName = "none";
+            string info = data + " " + player.IPAddress + " " + Nickname + " " + GroupName;
 
-            if (!plugin.list.ContainsKey(key))
+            if (!list_play.ContainsKey(key))
             {
-                plugin.list.Add(key, info);
+                list_play.Add(key, info);
             }
             else
             {
-                plugin.list.Remove(key);
-                plugin.list.Add(key, info);
+                list_play.Remove(key);
+                list_play.Add(key, info);
             }
             //plugin.InfoPlayers();
         }

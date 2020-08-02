@@ -21,16 +21,14 @@ namespace StatisticPlugin
 		public override Version Version { get; } = Assembly.GetExecutingAssembly().GetName().Version;
 		public override Version RequiredExiledVersion { get; } = new Version(2, 0, 7);
 
-		public string name;
 		public EventHandlers EventHandlers;
-		public string text = "kek\nprivet\nkak dela 1";
-
-		public Dictionary<string, string> list { get; set; } = new Dictionary<string, string>();
 		public override void OnEnabled()
 		{
 			
 			try
 			{
+				Dictionary<string, string> list_play = new Dictionary<string, string>();
+				list_play = new Dictionary<string, string>();
 				string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 				string pluginPath = Path.Combine(appData, "Plugins");
 				string path = Path.Combine(pluginPath, "StatPlayers");
@@ -51,12 +49,12 @@ namespace StatisticPlugin
 								break;
 							info += " ";
 							
-						}	
-						list.Add(temp[0],info);
+						}
+						list_play.Add(temp[0],info);
 					}
 				}
-				//InfoPlayers();
-				EventHandlers = new EventHandlers(this);
+				//InfoPlayers(list_play);
+				EventHandlers = new EventHandlers(this, list_play);
 				base.OnEnabled();
 				RegisterEvents();
 			}
@@ -77,9 +75,9 @@ namespace StatisticPlugin
 		{
 			
 		}
-		public void InfoPlayers()
+		public void InfoPlayers(Dictionary<string, string> list_play)
 		{
-			foreach(var t in list)
+			foreach(var t in list_play)
 			{
 				Log.Info(t.Key + " " + t.Value);
 			}
