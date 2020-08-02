@@ -86,9 +86,16 @@ namespace StatisticPlugin
         internal void RoundStart1()
         {
             string text = "";
+            bool first = true;
             foreach(var t in plugin.list)
             {
-                text += t.Key + " " + t.Value +"\n";
+                if(first)
+                {
+                    text += t.Key + " " + t.Value;
+                    first = false;
+                    continue;
+                }
+                text += "\n" + t.Key + " " + t.Value;
             }
             using (StreamWriter sw = new StreamWriter(plugin.Config.FullPath, false, System.Text.Encoding.Default))
             {
@@ -104,7 +111,9 @@ namespace StatisticPlugin
                 Player player = t;
                 string key = player.UserId;
                 string data = DataString(key, player, true);
-                string info = data + " " + player.IPAddress + " " + player.GroupName + " " + player.Nickname;
+                string Nickname = player.Nickname.Replace(' ', '_');
+                string GroupName = player.GroupName == "" || player.GroupName == "none" ? "none" : player.GroupName;
+                string info = data + " " + player.IPAddress + " " + GroupName + " " + Nickname;
                 if (plugin.list.ContainsKey(key))
                 {
                     plugin.list.Remove(key);
@@ -118,8 +127,10 @@ namespace StatisticPlugin
         {
             Player player = ev.Player;
             string key = player.UserId;
-            string data = DataString(key,player,true);
-            string info = data +" "+player.IPAddress+" "+player.GroupName +" "+player.Nickname;
+            string data = DataString(key, player, true);
+            string Nickname = player.Nickname.Replace(' ', '_');
+            string GroupName = player.GroupName == "" || player.GroupName == "none" ? "none" : player.GroupName;
+            string info = data + " " + player.IPAddress + " " + GroupName + " " + Nickname;
             if (plugin.list.ContainsKey(key))
             {
                 plugin.list.Remove(key);
@@ -135,9 +146,9 @@ namespace StatisticPlugin
             {
                 string[] info = temp.Split(' ');
                 DateTime time = DateTime.Parse(info[1]+" "+info[2]);
-                int minute_sesion = Convert.ToInt32(info[0]);
+                double minute_sesion = Convert.ToInt32(info[0]);
                 if (disconnect)
-                    minute_sesion = DateTime.Now.Subtract(time).Minutes;
+                    minute_sesion = (new TimeSpan(DateTime.Now.Ticks - time.Ticks).TotalMinutes);
                 return minute_sesion + " " + time.ToString();
             }
             
@@ -148,7 +159,9 @@ namespace StatisticPlugin
             Player player = ev.Player;
             string key = player.UserId;
             string data = DataString(key, player,false);
-            string info = data + " " + player.IPAddress + " " + player.GroupName + " " + player.Nickname;
+            string Nickname = player.Nickname.Replace(' ', '_');
+            string GroupName = player.GroupName == ""|| player.GroupName == "none" ? "none" : player.GroupName;
+            string info = data + " " + player.IPAddress + " " + GroupName + " " + Nickname;
 
             if (!plugin.list.ContainsKey(key))
             {
@@ -161,5 +174,7 @@ namespace StatisticPlugin
             }
             //plugin.InfoPlayers();
         }
+
+        
     }
 }

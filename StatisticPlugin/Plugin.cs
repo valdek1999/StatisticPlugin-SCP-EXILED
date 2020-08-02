@@ -55,7 +55,7 @@ namespace StatisticPlugin
 						list.Add(temp[0],info);
 					}
 				}
-				InfoPlayers();
+				//InfoPlayers();
 				EventHandlers = new EventHandlers(this);
 				base.OnEnabled();
 				RegisterEvents();
