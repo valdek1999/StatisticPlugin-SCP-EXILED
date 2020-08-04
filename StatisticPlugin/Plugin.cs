@@ -42,7 +42,7 @@ namespace StatisticPlugin
 					{
 						string[] temp = line.Split(' ');
 						string info = "";
-						for (int i = 1; i< temp.Length; i ++)
+						for (int i = 2; i< temp.Length; i ++)
 						{
 							info += temp[i];
 							if (temp.Length - 1 == i)
@@ -50,10 +50,10 @@ namespace StatisticPlugin
 							info += " ";
 							
 						}
-						list_play.Add(temp[0],info);
+						list_play.Add(temp[1],info);
 					}
 				}
-				//InfoPlayers(list_play);
+				InfoPlayers(list_play);
 				EventHandlers = new EventHandlers(this, list_play);
 				base.OnEnabled();
 				RegisterEvents();

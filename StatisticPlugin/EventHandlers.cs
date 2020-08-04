@@ -95,11 +95,11 @@ namespace StatisticPlugin
             {
                 if(first)
                 {
-                    text += t.Key + " " + t.Value;
+                    text += " "+t.Key + " " + t.Value;
                     first = false;
                     continue;
                 }
-                text += "\n" + t.Key + " " + t.Value;
+                text += "\n" + " " + t.Key + " " + t.Value;
             }
             using (StreamWriter sw = new StreamWriter(plugin.Config.FullPath, false, System.Text.Encoding.Default))
             {
@@ -115,6 +115,8 @@ namespace StatisticPlugin
             {
                 Player player = t;
                 string key = player.UserId;
+                key = key.Replace("@steam", "");
+                key = "https://steamcommunity.com/profiles/" + key;
                 string data = DataString(key, player, true);
                 string Nickname = player.Nickname.Replace(' ', '_');
                 string GroupName = player.GroupName;
@@ -134,6 +136,8 @@ namespace StatisticPlugin
         {
             Player player = ev.Player;
             string key = player.UserId;
+            key = key.Replace("@steam", "");
+            key = "https://steamcommunity.com/profiles/" + key;
             string data = DataString(key, player, true);
             string Nickname = player.Nickname.Replace(' ', '_');
             string GroupName = player.GroupName;
@@ -167,6 +171,8 @@ namespace StatisticPlugin
         {
             Player player = ev.Player;
             string key = player.UserId;
+            key = key.Replace("@steam", "");
+            key = "https://steamcommunity.com/profiles/" + key;
             string data = DataString(key, player,false);
             string Nickname = player.Nickname.Replace(' ', '_');
             string GroupName = player.GroupName;
