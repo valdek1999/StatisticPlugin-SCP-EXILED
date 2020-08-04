@@ -158,7 +158,7 @@ namespace StatisticPlugin
                 int minute_sesion = Convert.ToInt32(info[0]);
                 if (disconnect)
                     minute_sesion = Convert.ToInt32((new TimeSpan(DateTime.Now.Ticks - time.Ticks)).TotalMinutes);
-                return minute_sesion + " " + time.ToString();
+                return minute_sesion + " " + DateTime.Now.ToString();
             }
             
             return 0 + " " + DateTime.Now.ToString();
