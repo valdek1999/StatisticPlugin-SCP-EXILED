@@ -58,35 +58,35 @@ namespace StatisticPlugin
 					}
 				}
 				Log.Info("Заполнение базы данных...");
-				using (var context = new MyDbContext())
-				{
-					string[] info;
-					string key;
-					foreach (var temp in list_play)
-					{
-						info = temp.Value.Split(' ');
-						key = temp.Key.Replace("@steam", "");
-						var Player = new Player()
-						{
-							NickName = info[4],
-							Role = info[5],
-							Ip = 0,
-							SteamId = key
-						};
-						context.Players.Add(Player);
-						//все изменения перейдут в базу данных;
-						var Character = new Character()
-						{
-							PlayerId = Player.Id,
-							Player = Player,
-							Expirience = 0,
-							Lvl = 0
-						};
+				//using (var context = new MyDbContext())
+				//{
+				//	string[] info;
+				//	string key;
+				//	foreach (var temp in list_play)
+				//	{
+				//		info = temp.Value.Split(' ');
+				//		key = temp.Key.Replace("@steam", "");
+				//		var Player = new Player()
+				//		{
+				//			NickName = info[4],
+				//			Role = info[5],
+				//			Ip = 0,
+				//			SteamId = key
+				//		};
+				//		context.Players.Add(Player);
+				//		//все изменения перейдут в базу данных;
+				//		var Character = new Character()
+				//		{
+				//			PlayerId = Player.Id,
+				//			Player = Player,
+				//			Expirience = 0,
+				//			Lvl = 0
+				//		};
 
-					}
-					context.SaveChanges();
+				//	}
+				//	context.SaveChanges();
 
-				}
+				//}
 				//InfoPlayers(list_play);
 				EventHandlers = new EventHandlers(this, list_play);
 				base.OnEnabled();
