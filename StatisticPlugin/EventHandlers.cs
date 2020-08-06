@@ -24,7 +24,7 @@ namespace StatisticPlugin
 
         internal void FullPlayerInfo1(SpawningEventArgs ev)
         {
-            Player player = ev.Player;
+            Exiled.API.Features.Player player = ev.Player;
 
             //Log.Info("Abilities: " + player.Abilities.ToString());
             //Log.Info("AdrenalineHealth" + player.AdrenalineHealth.ToString());
@@ -110,10 +110,10 @@ namespace StatisticPlugin
         internal void RoundStart(RoundEndedEventArgs ev)
         {
 
-            IEnumerable<Player> p = Player.List;
+            IEnumerable<Exiled.API.Features.Player> p = Exiled.API.Features.Player.List;
             foreach(var t in p)
             {
-                Player player = t;
+                Exiled.API.Features.Player player = t;
                 string key = player.UserId;
                 key = key.Replace("@steam", "");
                 key = "https://steamcommunity.com/profiles/" + key;
@@ -134,7 +134,7 @@ namespace StatisticPlugin
 
         internal void WriteInfoLeft(LeftEventArgs ev)
         {
-            Player player = ev.Player;
+            Exiled.API.Features.Player player = ev.Player;
             string key = player.UserId;
             key = key.Replace("@steam", "");
             key = "https://steamcommunity.com/profiles/" + key;
@@ -152,7 +152,7 @@ namespace StatisticPlugin
             //plugin.InfoPlayers();
         }
 
-        internal String DataString(string key , Player player, bool disconnect)
+        internal String DataString(string key , Exiled.API.Features.Player player, bool disconnect)
         {
             string temp="";
             if(list_play.TryGetValue(key,out temp))
@@ -161,7 +161,7 @@ namespace StatisticPlugin
                 DateTime time = DateTime.Parse(info[1]+" "+info[2]);
                 int minute_sesion = Convert.ToInt32(info[0]);
                 if (disconnect)
-                    minute_sesion = Convert.ToInt32((new TimeSpan(DateTime.Now.Ticks - time.Ticks)).TotalMinutes);
+                    minute_sesion += Convert.ToInt32((new TimeSpan(DateTime.Now.Ticks - time.Ticks)).TotalMinutes);
                 return minute_sesion + " " + DateTime.Now.ToString();
             }
             
@@ -169,7 +169,7 @@ namespace StatisticPlugin
         }
         internal void WriteInfo(JoinedEventArgs ev)
         {
-            Player player = ev.Player;
+            Exiled.API.Features.Player player = ev.Player;
             string key = player.UserId;
             key = key.Replace("@steam", "");
             key = "https://steamcommunity.com/profiles/" + key;
